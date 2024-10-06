@@ -1,0 +1,12 @@
+<div>
+  <h2>Create a Pokémon Team</h2>
+  <form (ngSubmit)="addTeam()">
+    <div *ngFor="let pokemon of pokemons">
+      <label>
+        <input type="checkbox" [(ngModel)]="pokemon.selected" />
+        {{ pokemon.name }}
+      </label>
+    </div>
+    <button type="submit">Add Team</button>
+  </form>
+</div>
