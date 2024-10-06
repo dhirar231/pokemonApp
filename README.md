@@ -12,10 +12,7 @@ This **Pokémon Battle Application** allows users to manage their favorite Poké
 6. [Database Structure](#database-structure)
 7. [Future Enhancements](#future-enhancements)
 8. [Contributing](#contributing)
-<<<<<<< HEAD
-9. [License](#license)
-=======
->>>>>>> a4187cfef1512724ba8f8a294f62bed36af4b9c7
+
 
 ---
 
@@ -97,6 +94,54 @@ node server.js
 4. **Manage Your Teams**: Add, edit, or remove Pokémon from your teams as you like.
 
 ---
+## PostgreSQL
+
+CREATE OR REPLACE FUNCTION insert_team(
+    p_user_id UUID,
+    p_team_name TEXT,
+    p_pokemon_ids UUID[]
+) RETURNS UUID AS $$
+DECLARE
+    team_id UUID;
+BEGIN
+    -- Ensure exactly 6 Pokémon are provided
+    IF array_length(p_pokemon_ids, 1) != 6 THEN
+        RAISE EXCEPTION 'Exactly 6 Pokémon must be provided.';
+    END IF;
+    -- Insert the team into the team table
+    INSERT INTO public.team (user_id, team_name)
+    VALUES (p_user_id, p_team_name)
+    RETURNING id INTO team_id;
+    -- Insert Pokémon into the team_pokemon table
+    INSERT INTO public.team_pokemon (team_id, pokemon_id, slot_number)
+    SELECT team_id, unnest(p_pokemon_ids), generate_series(1, 6);
+    RETURN team_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_teams_ordered_by_power()
+RETURNS TABLE(team_id UUID, team_name TEXT, total_power INTEGER) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        t.id AS team_id,
+        t.team_name,
+        COALESCE(SUM(p.power), 0) AS total_power
+    FROM 
+        public.team t
+    LEFT JOIN 
+        public.team_pokemon tp ON t.id = tp.team_id
+    LEFT JOIN 
+        pokemon p ON tp.pokemon_id = p.id
+    GROUP BY 
+        t.id, t.team_name
+    ORDER BY 
+        total_power DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
 
 ## API Endpoints
 
