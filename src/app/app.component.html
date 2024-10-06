@@ -1,378 +1,219 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">PokemonApp</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarNav"
-    aria-controls="navbarNav"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
+    <a class="navbar-brand" href="#">PokemonApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item" *ngIf="!isAuthenticated">
-        <a class="nav-link" href="#" (click)="openSignUp()">Sign Up</a>
-      </li>
-      <li class="nav-item" *ngIf="!isAuthenticated">
-        <a class="nav-link" href="#" (click)="openSignIn()">Sign In</a>
-      </li>
-      <li class="nav-item" *ngIf="isAuthenticated">
-        <a class="nav-link" href="#" (click)="signOut()">Sign Out</a>
-      </li>
-    </ul>
-  </div>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item" *ngIf="!isAuthenticated">
+                <a class="nav-link" href="#" (click)="openSignUp()">Sign Up</a>
+            </li>
+            <li class="nav-item" *ngIf="!isAuthenticated">
+                <a class="nav-link" href="#" (click)="openSignIn()">Sign In</a>
+            </li>
+            <li class="nav-item" *ngIf="isAuthenticated">
+                <a class="nav-link" href="#" (click)="signOut()">Sign Out</a>
+            </li>
+        </ul>
+    </div>
 </nav>
 
 <div class="container mt-5">
-  <h1 class="text-center mb-4">Pokémon Manager</h1>
+    <h1 class="text-center mb-4">Pokémon Manager</h1>
 
-  <div class="accordion" id="pokemonManagerAccordion">
-    <!-- Add New Pokémon Section -->
-    <div class="card shadow-lg mb-4">
-      <div class="card-header bg-primary text-white" id="headingOne">
-        <h2 class="mb-0">
-          <button
-            class="btn btn-link text-white"
-            type="button"
-            data-toggle="collapse"
-            data-target="#collapseOne"
-            aria-expanded="true"
-            aria-controls="collapseOne"
-          >
+    <div class="accordion" id="pokemonManagerAccordion">
+        <!-- Add New Pokémon Section -->
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-primary text-white" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
             <i class="fas fa-plus-circle"></i> Add New Pokémon
           </button>
-        </h2>
-      </div>
-      <div
-        id="collapseOne"
-        class="collapse show"
-        aria-labelledby="headingOne"
-        data-parent="#pokemonManagerAccordion"
-      >
-        <div class="card-body bg-light">
-          <form (submit)="addPokemon()" class="mb-4" #pokemonForm="ngForm">
-            <div class="form-group">
-              <input
-                [(ngModel)]="newPokemon.name"
-                name="pokemonName"
-                placeholder="Name"
-                required
-                class="form-control"
-                (ngModelChange)="checkFormValidity()"
-              />
-              <div
-                class="invalid-feedback"
-                *ngIf="
+                </h2>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#pokemonManagerAccordion">
+                <div class="card-body bg-light">
+                    <form (submit)="addPokemon()" class="mb-4" #pokemonForm="ngForm">
+                        <div class="form-group">
+                            <input [(ngModel)]="newPokemon.name" name="pokemonName" placeholder="Name" required class="form-control" (ngModelChange)="checkFormValidity()" />
+                            <div class="invalid-feedback" *ngIf="
                   pokemonForm.controls['pokemonName']?.invalid &&
                   (pokemonForm.controls['pokemonName']?.touched ||
                     pokemonForm.controls['pokemonName']?.dirty)
-                "
-              >
-                Pokémon name must be at least 2 characters long.
-              </div>
-            </div>
-            <div class="form-group">
-              <select
-                [(ngModel)]="newPokemon.type"
-                name="pokemonType"
-                required
-                class="form-control"
-              >
+                ">
+                                Pokémon name must be at least 2 characters long.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select [(ngModel)]="newPokemon.type" name="pokemonType" required class="form-control">
                 <option value="" disabled selected>Select Type</option>
                 <option *ngFor="let type of types" [value]="type.id">
                   {{ type.name }}
                 </option>
               </select>
-              <div
-                class="invalid-feedback"
-                *ngIf="
+                            <div class="invalid-feedback" *ngIf="
                   pokemonForm.controls['pokemonType']?.invalid &&
                   (pokemonForm.controls['pokemonType']?.touched ||
                     pokemonForm.controls['pokemonType']?.dirty)
-                "
-              >
-                Please select a Pokémon type.
-              </div>
-            </div>
-            <div class="form-group">
-              <input
-                [(ngModel)]="newPokemon.power"
-                type="number"
-                name="pokemonPower"
-                placeholder="Power (10-100)"
-                min="10"
-                max="100"
-                required
-                class="form-control"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                [(ngModel)]="newPokemon.life"
-                type="number"
-                name="pokemonLife"
-                placeholder="Life (50-100)"
-                min="50"
-                max="100"
-                required
-                class="form-control"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                [(ngModel)]="newPokemon.image"
-                name="pokemonImage"
-                placeholder="Image URL"
-                class="form-control"
-              />
-            </div>
-            <button
-              type="submit"
-              class="btn btn-success btn-block"
-              [disabled]="pokemonForm.invalid"
-            >
+                ">
+                                Please select a Pokémon type.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input [(ngModel)]="newPokemon.power" type="number" name="pokemonPower" placeholder="Power (10-100)" min="10" max="100" required class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <input [(ngModel)]="newPokemon.life" type="number" name="pokemonLife" placeholder="Life (50-100)" min="50" max="100" required class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <input [(ngModel)]="newPokemon.image" name="pokemonImage" placeholder="Image URL" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block" [disabled]="pokemonForm.invalid">
               Add Pokémon
             </button>
-          </form>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Available Pokémon Section -->
-    <div class="card shadow-lg mb-4">
-      <div class="card-header bg-warning text-dark" id="headingTwo">
-        <h2 class="mb-0">
-          <button
-            class="btn btn-link text-dark"
-            type="button"
-            data-toggle="collapse"
-            data-target="#collapseTwo"
-            aria-expanded="false"
-            aria-controls="collapseTwo"
-          >
+        <!-- Available Pokémon Section -->
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-warning text-dark" id="headingTwo">
+                <h2 class="mb-0">
+                    <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
             <i class="fas fa-list"></i> Available Pokémon
           </button>
-        </h2>
-      </div>
-      <div
-        id="collapseTwo"
-        class="collapse"
-        aria-labelledby="headingTwo"
-        data-parent="#pokemonManagerAccordion"
-      >
-        <div class="card-body bg-light">
-          <ul class="list-group mb-4">
-            <li
-              *ngFor="let pokemon of pokemons"
-              class="list-group-item d-flex align-items-center mb-3 border rounded shadow-sm"
-            >
-              <input
-                type="checkbox"
-                (change)="selectPokemon(pokemon.id)"
-                class="mr-3"
-              />
-              <img
-                [src]="pokemon.image || 'default-image-url.jpg'"
-                alt="{{ pokemon.name }}"
-                class="img-thumbnail mr-3"
-                style="width: 50px; height: 50px; object-fit: cover"
-              />
-              <div class="flex-grow-1">
-                <strong>{{ pokemon.name }}</strong> ({{ pokemon.type.name }})
-                <div class="text-muted">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <small>Power:</small>
-                      <input
-                        [(ngModel)]="pokemon.power"
-                        type="number"
-                        min="10"
-                        max="100"
-                        class="form-control form-control-sm w-50 d-inline"
-                      />
-                    </div>
-                    <div>
-                      <small>Life:</small>
-                      <input
-                        [(ngModel)]="pokemon.life"
-                        type="number"
-                        min="50"
-                        max="100"
-                        class="form-control form-control-sm w-50 d-inline"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button
-                (click)="updatePokemon(pokemon)"
-                class="btn btn-secondary btn-sm"
-              >
+                </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#pokemonManagerAccordion">
+                <div class="card-body bg-light">
+                    <ul class="list-group mb-4">
+                        <li *ngFor="let pokemon of pokemons" class="list-group-item d-flex align-items-center mb-3 border rounded shadow-sm">
+                            <input type="checkbox" (change)="selectPokemon(pokemon.id)" class="mr-3" />
+                            <img [src]="pokemon.image || 'default-image-url.jpg'" alt="{{ pokemon.name }}" class="img-thumbnail mr-3" style="width: 50px; height: 50px; object-fit: cover" />
+                            <div class="flex-grow-1">
+                                <strong>{{ pokemon.name }}</strong> ({{ pokemon.type.name }})
+                                <div class="text-muted">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <small>Power:</small>
+                                            <input [(ngModel)]="pokemon.power" type="number" min="10" max="100" class="form-control form-control-sm w-50 d-inline" />
+                                        </div>
+                                        <div>
+                                            <small>Life:</small>
+                                            <input [(ngModel)]="pokemon.life" type="number" min="50" max="100" class="form-control form-control-sm w-50 d-inline" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button (click)="updatePokemon(pokemon)" class="btn btn-secondary btn-sm">
                 Update
               </button>
-            </li>
-          </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Add Team Section -->
-    <div class="card shadow-lg mb-4">
-      <div class="card-header bg-success text-white" id="headingThree">
-        <h2 class="mb-0">
-          <button
-            class="btn btn-link text-white"
-            type="button"
-            data-toggle="collapse"
-            data-target="#collapseThree"
-            aria-expanded="false"
-            aria-controls="collapseThree"
-          >
+        <!-- Add Team Section -->
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-success text-white" id="headingThree">
+                <h2 class="mb-0">
+                    <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
             <i class="fas fa-users"></i> Add Team
           </button>
-        </h2>
-      </div>
-      <div
-        id="collapseThree"
-        class="collapse"
-        aria-labelledby="headingThree"
-        data-parent="#pokemonManagerAccordion"
-      >
-        <div class="card-body">
-          <h5 class="text-center mb-4">Selected Pokémon:</h5>
-
-          <div class="row">
-            <div *ngFor="let id of selectedPokemonIds" class="col-md-4">
-              <div class="card mb-3 shadow-sm">
-                <img
-                  class="card-img-top"
-                  [src]="getPokemonById(id)?.image || 'default-image-url.jpg'"
-                  alt="Pokémon image"
-                  style="height: 200px; object-fit: cover"
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    {{ getPokemonById(id)?.name || "Unknown Pokémon" }}
-                  </h5>
-                  <p class="card-text">
-                    <strong>Type:</strong> {{ getPokemonById(id)?.type.name }}
-                    <br />
-                    <strong>Power:</strong> {{ getPokemonById(id)?.power }}
-                    <br />
-                    <strong>Life:</strong> {{ getPokemonById(id)?.life }}
-                  </p>
-                </div>
-              </div>
+                </h2>
             </div>
-          </div>
-          <button
-            (click)="openConfirmationModal()"
-            class="btn btn-success btn-block mt-4"
-          >
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#pokemonManagerAccordion">
+                <div class="card-body">
+                    <h5 class="text-center mb-4">Selected Pokémon:</h5>
+
+                    <div class="row">
+                        <div *ngFor="let id of selectedPokemonIds" class="col-md-4">
+                            <div class="card mb-3 shadow-sm">
+                                <img class="card-img-top" [src]="getPokemonById(id)?.image || 'default-image-url.jpg'" alt="Pokémon image" style="height: 200px; object-fit: cover" />
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        {{ getPokemonById(id)?.name || "Unknown Pokémon" }}
+                                    </h5>
+                                    <p class="card-text">
+                                        <strong>Type:</strong> {{ getPokemonById(id)?.type.name }}
+                                        <br />
+                                        <strong>Power:</strong> {{ getPokemonById(id)?.power }}
+                                        <br />
+                                        <strong>Life:</strong> {{ getPokemonById(id)?.life }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button (click)="openConfirmationModal()" class="btn btn-success btn-block mt-4">
             Create Team
           </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="card shadow-lg mb-4">
-      <div class="card-header bg-info text-white" id="headingFour">
-        <h2 class="mb-0">
-          <button
-            class="btn btn-link text-white"
-            type="button"
-            data-toggle="collapse"
-            data-target="#collapseFour"
-            aria-expanded="false"
-            aria-controls="collapseFour"
-          >
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-info text-white" id="headingFour">
+                <h2 class="mb-0">
+                    <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
             <i class="fas fa-users"></i> View Available Teams
           </button>
-        </h2>
-      </div>
-      <div
-        id="collapseFour"
-        class="collapse"
-        aria-labelledby="headingFour"
-        data-parent="#pokemonManagerAccordion"
-      >
-        <div class="card-body">
-          <h5 class="text-center mb-4">Available Teams:</h5>
-
-          <div class="row">
-            <div *ngFor="let team of teams" class="col-md-4">
-              <div class="card mb-3 shadow-sm">
+                </h2>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#pokemonManagerAccordion">
                 <div class="card-body">
-                  <h5 class="card-title">Team name: {{ team.team_name }}</h5>
-                  <!-- <p class="card-text" *ngFor="let pokemon of team.pokemons">
+                    <h5 class="text-center mb-4">Available Teams:</h5>
+
+                    <div class="row">
+                        <div *ngFor="let team of teams" class="col-md-4">
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">Team name: {{ team.team_name }}</h5>
+                                    <!-- <p class="card-text" *ngFor="let pokemon of team.pokemons">
                                         {{ getPokemonById(pokemon.pokemon_id).name }} -->
-                  <ul class="list-group mb-4">
-                    <li
-                      *ngFor="let pokemon of team.pokemons"
-                      class="list-group-item d-flex align-items-center mb-3 border rounded shadow-sm"
-                    >
-                      <img
-                        [src]="
+                                    <ul class="list-group mb-4">
+                                        <li *ngFor="let pokemon of team.pokemons" class="list-group-item d-flex align-items-center mb-3 border rounded shadow-sm">
+                                            <img [src]="
                           getPokemonById(pokemon.pokemon_id).image ||
                           'default-image-url.jpg'
-                        "
-                        alt="{{ getPokemonById(pokemon.pokemon_id).name }}"
-                        class="img-thumbnail mr-3"
-                        style="width: 50px; height: 50px; object-fit: cover"
-                      />
-                      <div class="flex-grow-1">
-                        <strong>{{ pokemon.name }}</strong> ({{
-                          getPokemonById(pokemon.pokemon_id).type.name
-                        }})
-                        <div class="text-muted">
-                          <div class="d-flex justify-content-between">
-                            <div>
-                              <small>Power:</small>
-                              <p
-                                type="number"
-                                min="10"
-                                max="100"
-                                class="w-50 d-inline"
-                              >
-                                {{ getPokemonById(pokemon.pokemon_id).power }}
-                              </p>
-                            </div>
-                            <div>
-                              <small>Life:</small>
-                              <p
-                                type="number"
-                                min="10"
-                                max="100"
-                                class="w-50 d-inline"
-                              >
-                                {{ getPokemonById(pokemon.pokemon_id).life }}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                  <!-- </p> -->
-                  <button
-                    (click)="viewTeamDetails(team.id)"
-                    class="btn btn-info"
-                  >
-                    View Team Details
-                  </button>
-                  <!-- Battle Button -->
+                        " alt="{{ getPokemonById(pokemon.pokemon_id).name }}" class="img-thumbnail mr-3" style="width: 50px; height: 50px; object-fit: cover" />
+                                            <div class="flex-grow-1">
+                                                <strong>{{ pokemon.name }}</strong> ({{ getPokemonById(pokemon.pokemon_id).type.name }})
+                                                <div class="text-muted">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div>
+                                                            <small>Power:</small>
+                                                            <p type="number" min="10" max="100" class="w-50 d-inline">
+                                                                {{ getPokemonById(pokemon.pokemon_id).power }}
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <small>Life:</small>
+                                                            <p type="number" min="10" max="100" class="w-50 d-inline">
+                                                                {{ getPokemonById(pokemon.pokemon_id).life }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <!-- </p> -->
 
-                  <button class="btn btn-danger" (click)="initiateBattle(team)">
+                                    View Team Details
+                                    </button>
+                                    <!-- Battle Button -->
+
+                                    <button class="btn btn-danger" (click)="initiateBattle(team)">
                     Start Battle
                   </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
