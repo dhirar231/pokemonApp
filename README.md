@@ -12,7 +12,10 @@ This **Pokémon Battle Application** allows users to manage their favorite Poké
 6. [Database Structure](#database-structure)
 7. [Future Enhancements](#future-enhancements)
 8. [Contributing](#contributing)
+<<<<<<< HEAD
 9. [License](#license)
+=======
+>>>>>>> a4187cfef1512724ba8f8a294f62bed36af4b9c7
 
 ---
 
